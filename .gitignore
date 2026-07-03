@@ -1,0 +1,18 @@
+# ESP-IDF and CMake build output
+/build/
+/sdkconfig
+/sdkconfig.old
+/flasher_args.json
+/desktop/build/
+/desktop/build-ninja/
+
+# Downloaded component sources
+/managed_components/
+
+# Common editor and OS noise
+/.vscode/
+/.idea/
+*.swp
+*.swo
+*~
+.DS_Store
