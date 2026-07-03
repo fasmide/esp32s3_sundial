@@ -15,7 +15,8 @@ It is built with **ESP-IDF** for the **ESP32-S3**.
 
 Add a product photo or screenshot here:
 
-![Sundial photo or screenshot](docs/images/sundial.jpg)
+<img width="1055" height="890" alt="image" src="https://github.com/user-attachments/assets/6d462767-f788-4830-8643-8243cd126233" />
+
 - [Demo video 1](docs/videos/demo-1.mp4)
 - [Demo video 2](docs/videos/demo-2.mp4)
 
