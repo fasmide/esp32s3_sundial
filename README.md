@@ -11,6 +11,8 @@ The firmware renders a full-screen 480x480 analog-style clock with:
 
 It is built with **ESP-IDF** for the **ESP32-S3**.
 
+## Media
+
 Add a product photo or screenshot here:
 
 ![Sundial photo or screenshot](docs/images/sundial.jpg)
@@ -174,3 +176,15 @@ To regenerate the font header after changing the font or glyph generation settin
 ```bash
 python tools/generate_font_header.py
 ```
+
+## License
+
+This project is released under the **Unlicense**.
+
+See:
+
+- `UNLICENSE`
+
+Note that bundled font assets may have their own license terms. See:
+
+- `assets/fonts/DejaVu-LICENSE.txt`
