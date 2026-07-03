@@ -11,14 +11,13 @@ The firmware renders a full-screen 480x480 analog-style clock with:
 
 It is built with **ESP-IDF** for the **ESP32-S3**.
 
-## Media
-
-Add a product photo or screenshot here:
-
 <img width="1055" height="890" alt="image" src="https://github.com/user-attachments/assets/6d462767-f788-4830-8643-8243cd126233" />
 
-- [Demo video 1](docs/videos/demo-1.mp4)
-- [Demo video 2](docs/videos/demo-2.mp4)
+### At 24 hours pr second
+[At 24 hours pr second](https://github.com/user-attachments/assets/15e7d965-729f-4980-bc3c-15556cb0f613)
+
+### At 800 hours pr second
+[At 800 hours pr second](https://github.com/user-attachments/assets/b84f1376-5665-49b2-961a-963527a81fe9)
 
 ## Hardware target
 
