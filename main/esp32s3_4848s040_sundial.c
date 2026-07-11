@@ -30,10 +30,17 @@
 
 #include "generated_font.h"
 
+// Board configuration selection
+// Uncomment the board you want to target:
+#define BOARD_GUITION_ESP32_S3_4848S040
+// #define BOARD_ZX2D10GE01R_V4848
+
 #define LCD_H_RES 480
 #define LCD_V_RES 480
 #define LCD_BITS_PER_PIXEL 16
 #define LCD_BYTES_PER_PIXEL 2
+
+#if defined(BOARD_GUITION_ESP32_S3_4848S040)
 
 #define LCD_PIN_PCLK 21
 #define LCD_PIN_DE 18
@@ -47,6 +54,26 @@
 #define LCD_PIN_BL 38
 
 #define LCD_PCLK_HZ (12 * 1000 * 1000)
+
+#elif defined(BOARD_ZX2D10GE01R_V4848)
+
+#define LCD_PIN_PCLK 45
+#define LCD_PIN_DE 39
+#define LCD_PIN_VSYNC 48
+#define LCD_PIN_HSYNC 40
+
+#define LCD_PIN_SPI_CS 21
+#define LCD_PIN_SPI_SCL 47
+#define LCD_PIN_SPI_SDA 41
+
+#define LCD_PIN_BL 38
+
+#define LCD_PCLK_HZ (15 * 1000 * 1000)
+
+#else
+#error "Please select a display board board by defining either BOARD_GUITION_ESP32_S3_4848S040 or BOARD_ZX2D10GE01R_V4848"
+#endif
+
 #define LCD_BOUNCE_LINES 10
 #define LCD_BOUNCE_PIXELS (LCD_H_RES * LCD_BOUNCE_LINES)
 
@@ -102,7 +129,8 @@ static uint16_t *s_frame_back;
 static uint16_t *s_static_background;
 static volatile uint16_t *s_active_frame;
 
-static const st7701_lcd_init_cmd_t s_st7701_type9_init_ops[] = {
+#if defined(BOARD_GUITION_ESP32_S3_4848S040)
+static const st7701_lcd_init_cmd_t s_st7701_init_ops[] = {
     {0xFF, (uint8_t[]){0x77, 0x01, 0x00, 0x00, 0x10}, 5, 0},
     {0xC0, (uint8_t[]){0x3B, 0x00}, 2, 0},
     {0xC1, (uint8_t[]){0x0D, 0x02}, 2, 0},
@@ -146,6 +174,57 @@ static const st7701_lcd_init_cmd_t s_st7701_type9_init_ops[] = {
     {0x11, NULL, 0, 120},
     {0x29, NULL, 0, 0},
 };
+#elif defined(BOARD_ZX2D10GE01R_V4848)
+static const st7701_lcd_init_cmd_t s_st7701_init_ops[] = {
+    {0xFF, (uint8_t[]){0x77, 0x01, 0x00, 0x00, 0x13}, 5, 0},
+    {0xEF, (uint8_t[]){0x08}, 1, 0},
+    {0xFF, (uint8_t[]){0x77, 0x01, 0x00, 0x00, 0x10}, 5, 0},
+    {0xC0, (uint8_t[]){0x3B, 0x00}, 2, 0},
+    {0xC1, (uint8_t[]){0x0B, 0x02}, 2, 0},
+    {0xC2, (uint8_t[]){0x07, 0x02}, 2, 0},
+    {0xCC, (uint8_t[]){0x10}, 1, 0},
+    {0xCD, (uint8_t[]){0x08}, 1, 0},
+    {0xB0, (uint8_t[]){0x00, 0x11, 0x16, 0x0E, 0x11, 0x06, 0x05, 0x09,
+                      0x08, 0x21, 0x06, 0x13, 0x10, 0x29, 0x31, 0x18}, 16, 0},
+    {0xB1, (uint8_t[]){0x00, 0x11, 0x16, 0x0E, 0x11, 0x07, 0x05, 0x09,
+                      0x09, 0x21, 0x05, 0x13, 0x11, 0x2A, 0x31, 0x18}, 16, 0},
+    {0xFF, (uint8_t[]){0x77, 0x01, 0x00, 0x00, 0x11}, 5, 0},
+    {0xB0, (uint8_t[]){0x6D}, 1, 0},
+    {0xB1, (uint8_t[]){0x37}, 1, 0},
+    {0xB2, (uint8_t[]){0x81}, 1, 0},
+    {0xB3, (uint8_t[]){0x80}, 1, 0},
+    {0xB5, (uint8_t[]){0x43}, 1, 0},
+    {0xB7, (uint8_t[]){0x85}, 1, 0},
+    {0xB8, (uint8_t[]){0x20}, 1, 0},
+    {0xC1, (uint8_t[]){0x78}, 1, 0},
+    {0xC2, (uint8_t[]){0x78}, 1, 0},
+    {0xD0, (uint8_t[]){0x88}, 1, 0},
+    {0xE0, (uint8_t[]){0x00, 0x00, 0x02}, 3, 0},
+    {0xE1, (uint8_t[]){0x03, 0xA0, 0x00, 0x00, 0x04, 0xA0, 0x00, 0x00,
+                      0x00, 0x20, 0x20}, 11, 0},
+    {0xE2, (uint8_t[]){0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00, 0x00}, 13, 0},
+    {0xE3, (uint8_t[]){0x00, 0x00, 0x11, 0x00}, 4, 0},
+    {0xE4, (uint8_t[]){0x22, 0x00}, 2, 0},
+    {0xE5, (uint8_t[]){0x05, 0xEC, 0xA0, 0xA0, 0x07, 0xEE, 0xA0, 0xA0,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 16, 0},
+    {0xE6, (uint8_t[]){0x00, 0x00, 0x11, 0x00}, 4, 0},
+    {0xE7, (uint8_t[]){0x22, 0x00}, 2, 0},
+    {0xE8, (uint8_t[]){0x06, 0xED, 0xA0, 0xA0, 0x08, 0xEF, 0xA0, 0xA0,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 16, 0},
+    {0xEB, (uint8_t[]){0x00, 0x00, 0x40, 0x40, 0x00, 0x00, 0x00}, 7, 0},
+    {0xED, (uint8_t[]){0xFF, 0xFF, 0xFF, 0xBA, 0x0A, 0xBF, 0x45, 0xFF,
+                      0xFF, 0x54, 0xFB, 0xA0, 0xAB, 0xFF, 0xFF, 0xFF}, 16, 0},
+    {0xEF, (uint8_t[]){0x10, 0x0D, 0x04, 0x08, 0x3F, 0x1F}, 6, 0},
+    {0xFF, (uint8_t[]){0x77, 0x01, 0x00, 0x00, 0x13}, 5, 0},
+    {0xEF, (uint8_t[]){0x08}, 1, 0},
+    {0xFF, (uint8_t[]){0x77, 0x01, 0x00, 0x00, 0x00}, 5, 0},
+    {0x36, (uint8_t[]){0x00}, 1, 0},
+    {0x3A, (uint8_t[]){0x66}, 1, 0},
+    {0x11, NULL, 0, 120},
+    {0x29, NULL, 0, 20},
+};
+#endif
 
 static inline uint16_t rgb565(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -851,12 +930,21 @@ static esp_lcd_rgb_timing_t make_panel_timing(void)
         .pclk_hz = LCD_PCLK_HZ,
         .h_res = LCD_H_RES,
         .v_res = LCD_V_RES,
+#if defined(BOARD_GUITION_ESP32_S3_4848S040)
         .hsync_pulse_width = 8,
         .hsync_back_porch = 50,
         .hsync_front_porch = 10,
         .vsync_pulse_width = 8,
         .vsync_back_porch = 20,
         .vsync_front_porch = 10,
+#elif defined(BOARD_ZX2D10GE01R_V4848)
+        .hsync_pulse_width = 10,
+        .hsync_back_porch = 10,
+        .hsync_front_porch = 10,
+        .vsync_pulse_width = 2,
+        .vsync_back_porch = 12,
+        .vsync_front_porch = 14,
+#endif
         .flags = {
             .hsync_idle_low = false,
             .vsync_idle_low = false,
@@ -886,9 +974,15 @@ static esp_lcd_rgb_panel_config_t make_rgb_config(void)
         .pclk_gpio_num = LCD_PIN_PCLK,
         .disp_gpio_num = -1,
         .data_gpio_nums = {
+#if defined(BOARD_GUITION_ESP32_S3_4848S040)
             4, 5, 6, 7, 15,
             8, 20, 3, 46, 9, 10,
             11, 12, 13, 14, 0,
+#elif defined(BOARD_ZX2D10GE01R_V4848)
+            47, 41, 0, 42, 14,
+            8, 13, 18, 12, 11, 17,
+            10, 16, 9, 15, 46,
+#endif
         },
         .flags = {
             .fb_in_psram = 0,
@@ -926,8 +1020,8 @@ static void send_st7701_init_only(void)
     esp_lcd_rgb_panel_config_t rgb_config = make_rgb_config();
     st7701_vendor_config_t vendor_config = {
         .rgb_config = &rgb_config,
-        .init_cmds = s_st7701_type9_init_ops,
-        .init_cmds_size = sizeof(s_st7701_type9_init_ops) / sizeof(s_st7701_type9_init_ops[0]),
+        .init_cmds = s_st7701_init_ops,
+        .init_cmds_size = sizeof(s_st7701_init_ops) / sizeof(s_st7701_init_ops[0]),
         .flags = {
             .enable_io_multiplex = 1,
         },
